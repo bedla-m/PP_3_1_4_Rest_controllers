@@ -1,11 +1,15 @@
 package ru.kata.spring.boot_security.demo.model;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,8 +23,15 @@ public class User implements UserDetails {
     private String name;
     private String surname;
     private Byte age;
+
+    @JsonProperty
     private String password;
+
+    @Column(unique = true)
     private String username;
+
+    @Transient
+    private List<Long> roleIds;
 
     @ManyToMany
     @JoinTable(
@@ -70,6 +81,7 @@ public class User implements UserDetails {
         this.age = age;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
@@ -94,26 +106,39 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
+    public List<Long> getRoleIds() {
+        return roleIds;
+    }
+
+    public void setRoleIds(List<Long> roleIds) {
+        this.roleIds = roleIds;
+    }
+
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
         return true;

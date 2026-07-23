@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         if (user.getPassword() != null && !user.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-        } else {
+        } else if (user.getId() != null) {
             User emptyPass = userRepository.findById(user.getId())
                     .orElseThrow(() -> new RuntimeException("User not found"));
             user.setPassword(emptyPass.getPassword());
@@ -91,5 +91,41 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         String username = auth.getName();
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public User getUserByIdWithRoles(Long id) {
+        return userRepository.findByIdWithRoles(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @Override
+    @Transactional
+    public User updateUser(User userData, Long id) {
+        User editUser = userRepository.findByIdWithRoles(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (userData.getName() != null && !userData.getName().isEmpty()) {
+            editUser.setName(userData.getName());
+        }
+
+        if (userData.getSurname() != null && !userData.getSurname().isEmpty()) {
+            editUser.setSurname(userData.getSurname());
+        }
+
+        if (userData.getAge() != null) {
+            editUser.setAge(userData.getAge());
+        }
+
+        if (userData.getUsername() != null && !userData.getUsername().isEmpty()) {
+            editUser.setUsername(userData.getUsername());
+        }
+        if (userData.getPassword() != null && !userData.getPassword().isEmpty()) {
+            editUser.setPassword(passwordEncoder.encode(userData.getPassword()));
+        }
+
+        if (userData.getRoleIds() != null && !userData.getRoleIds().isEmpty()) {
+            editUser.setRoles(new HashSet<>(roleRepository.findAllById(userData.getRoleIds())));
+        }
+        return userRepository.save(editUser);
     }
 }

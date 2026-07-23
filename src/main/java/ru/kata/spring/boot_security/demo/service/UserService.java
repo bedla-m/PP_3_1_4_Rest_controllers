@@ -24,4 +24,8 @@ public interface UserService extends UserDetailsService {
 
     User getCurrentUserFromContext();
 
+    User getUserByIdWithRoles(Long id);
+
+    User updateUser(User userData, Long id);
+
 }

@@ -1,25 +1,221 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Admin</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 
-
-<body>
+<body class="bg-light min-vh-100">
 <div class="bg-dark text-white p-2">
-    <div style="text-align: right; padding: 10px;">
-        <a th:href="@{/login}">
-            <button class="btn btn-light">Login</button>
-        </a>
+    <div class="container d-flex justify-content-between align-items-center">
+        <div>
+            <p class="mb-0 fs-5">
+                Hello, your username: <span class="font-weight-bold" id="currentUsername"></span>
+            </p>
+        </div>
+
+        <div style="text-align: right; padding: 10px;">
+            <button class="btn btn-light" id="logoutBtn">logout</button>
+        </div>
+    </div>
+</div>
+<br>
+<div class="container">
+
+    <div class="row">
+
+        <!-- Боковое меню -->
+        <div class="col-2">
+            <div class="list-group" id="side-menu" role="tablist">
+                <a class="list-group-item list-group-item-action active" data-toggle="list" id="admin-panel"
+                   href="#admin-section"
+                   role="tab">Admin
+                </a>
+                <a class="list-group-item list-group-item-action" data-toggle="list" href="#user-section"
+                   role="tab">User
+                </a>
+            </div>
+        </div>
+
+        <!-- Контент -->
+        <div class="col-10">
+
+            <div class="tab-content" id="mainTabContent">
+
+                <!-- Админка -->
+                <div class="tab-pane show active" id="admin-section" role="tabpanel">
+                    <h1>Admin Panel</h1>
+
+                    <!-- Верхние вкладки -->
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="users-tab" data-toggle="tab" href="#users_table" role="tab">Users
+                                table</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="add-tab" data-toggle="tab" href="#add_user" role="tab">Add user</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="myTabContent">
+
+                        <!-- Таблица -->
+                        <div class="tab-pane show active" id="users_table" role="tabpanel">
+                            <div class="bg-white border rounded">
+                                <div class="bg-light text-black p-2 rounded-top border-bottom">
+                                    <h5 class="p-2">All Users</h5>
+                                </div>
+
+                                <div class="p-3">
+                                    <table class="table table-striped mt-3 bg-white">
+                                        <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Surname</th>
+                                            <th>Age</th>
+                                            <th>Username</th>
+                                            <th>Role</th>
+                                            <th>Edit</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="users_table_script">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="add_user" role="tabpanel">
+                            <div class="bg-white border rounded">
+                                <div class="bg-light text-black p-2 rounded-top border-bottom">
+                                    <h5 class="p-2">Add New User</h5>
+
+                                    <form id="addUserForm">
+                                        <div class="form-group">
+                                            <input type="hidden" id="editNewId" class="form-control" disabled>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Name</label>
+                                            <input type="text" class="form-control" id="editNewName">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Surname</label>
+                                            <input type="text" class="form-control" id="editNewSurname">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Age</label>
+                                            <input type="number" class="form-control" id="editNewAge">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Username</label>
+                                            <input type="text" class="form-control" id="editNewUsername">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Password</label>
+                                            <input type="password" class="form-control" id="editNewPassword"
+                                                   autocomplete="off">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Roles</label>
+                                            <select multiple class="form-control" id="addRoles"></select>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="user-section" role="tabpanel">
+                    <div class="p-3">
+                        <h5 class="p-2">Your page</h5>
+                        <table class="table table-striped mt-3 bg-white">
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Surname</th>
+                                <th>Age</th>
+                                <th>Username</th>
+                                <th>Role</th>
+                            </tr>
+                            <tbody id=currentUser></tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal" id="editModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit User</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+
+                        <div class="form-group">
+                            <label>ID</label>
+                            <input type="number" class="form-control" id="editId" disabled>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" class="form-control" id="editName">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Surname</label>
+                            <input type="text" class="form-control" id="editSurname">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Age</label>
+                            <input type="number" class="form-control" id="editAge">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" class="form-control" id="editUsername">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" class="form-control" id="editPassword" autocomplete="off">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Roles</label>
+                            <select multiple class="form-control" id="editRoles"></select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<br>
-<h1>Welcome to Index PAGE!</h1>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script th:src="@{/js/admin.js}"></script>
+
 </body>
 </html>
