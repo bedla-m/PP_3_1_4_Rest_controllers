@@ -38,6 +38,7 @@ public class UserRestController {
     }
 
     @GetMapping("/me")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<User> getCurrentUser() {
         User user = userService.getCurrentUserFromContext();
         if (user == null) {
