@@ -141,8 +141,8 @@ async function init() {
 
     if (isAdmin) {
         await loadUsers();
+        await loadRoles();
     }
-    await loadRoles();
     await openCurrentUser();
 }
 

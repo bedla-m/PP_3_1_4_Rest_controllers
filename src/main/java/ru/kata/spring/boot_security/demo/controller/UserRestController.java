@@ -48,7 +48,7 @@ public class UserRestController {
     }
 
     @GetMapping("/roles")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Role>> getRoles() {
         return ResponseEntity.ok(roleService.getAllRoles());
     }
