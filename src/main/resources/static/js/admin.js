@@ -132,7 +132,7 @@ async function deleteUser(id) {
 
 async function init() {
     const me = await fetch('/api/controller/me').then(r => r.json());
-    const isAdmin = me.roles.some(r => r.roleName === 'ROLE_ADMIN');
+    const isAdmin = me.roles && me.roles.some(r => r.roleName === 'ROLE_ADMIN');
 
     document.getElementById('admin-panel').style.display = isAdmin ? 'block' : 'none';
 
