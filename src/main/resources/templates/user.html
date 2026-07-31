@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+
+<div th:replace="admin :: header"></div>
+<br>
+
+<body class="bg-light min-vh-100">
+
+<div class="container">
+
+    <div class="row">
+
+        <!-- Боковое меню -->
+        <div class="col-2">
+            <div class="list-group" id="side-menu" role="tablist">
+                <a class="list-group-item list-group-item-action active"
+                   data-toggle="list" href="#"
+                   role="tab">User</a>
+            </div>
+        </div>
+
+        <!-- Контент -->
+        <div class="col-10">
+            <div th:fragment="profile" th:object="${profileUser}">
+                <h1>User Profile</h1>
+                <br>
+
+                <div class="bg-white border rounded">
+                    <div class="bg-light text-black p-2 rounded-top border-bottom">
+                        <h5 class="p-2">Your profile</h5>
+                    </div>
+
+                    <div class="p-3">
+                        <table class="table table-striped mt-3 bg-white">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Surname</th>
+                                <th>Age</th>
+                                <th>Username</th>
+                                <th>Role</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td th:text="${profileUser.id}"></td>
+                                <td th:text="${profileUser.name}"></td>
+                                <td th:text="${profileUser.surname}"></td>
+                                <td th:text="${profileUser.age}"></td>
+                                <td th:text="${profileUser.username}"></td>
+                                <td>
+                                    <span th:each="role : ${profileUser.roles}" th:text="${role.roleName} + ' '"></span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
