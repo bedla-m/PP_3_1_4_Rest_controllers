@@ -184,8 +184,7 @@ async function saveNewUser() {
             body: JSON.stringify(user)
         });
         if (responseJson.ok) {
-            const form = document.getElementById('addUserForm');
-            form.reset();
+            loadUsers().then(() => console.log('Пользоватлеь добавлен!'));
             document.getElementById('users-tab').click();
             document.getElementById('addUserForm').reset();
         } else {
