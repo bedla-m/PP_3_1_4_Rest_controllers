@@ -177,14 +177,15 @@ async function saveNewUser() {
             roleIds: Array.from(document.getElementById('addRoles').selectedOptions)
                 .map(opt => parseInt(opt.value))
         }
-        console.log('Данные из формы:', user);
+
         const responseJson = await fetch('/api/controller', {
             method: 'POST',
             headers: {'Content-type': 'application/json'},
             body: JSON.stringify(user)
         });
         if (responseJson.ok) {
-            loadUsers().then(() => console.log('Пользоватлеь добавлен!'));
+            const form = document.getElementById('addUserForm');
+            form.reset();
             document.getElementById('users-tab').click();
             document.getElementById('addUserForm').reset();
         } else {
