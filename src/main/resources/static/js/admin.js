@@ -44,7 +44,7 @@ async function loadUsers() {
 
 async function openCurrentUser() {
     try {
-        const response = await fetch('/api/controller/me');
+        const response = await fetch('/user/me');
 
         if (response.ok) {
             const currentUser = await response.json();
@@ -131,7 +131,7 @@ async function deleteUser(id) {
 }
 
 async function init() {
-    const me = await fetch('/api/controller/me').then(r => r.json());
+    const me = await fetch('/user/me').then(r => r.json());
     const isAdmin = me.roles && me.roles.some(r => r.roleName === 'ROLE_ADMIN');
 
     document.getElementById('admin-panel').style.display = isAdmin ? 'block' : 'none';

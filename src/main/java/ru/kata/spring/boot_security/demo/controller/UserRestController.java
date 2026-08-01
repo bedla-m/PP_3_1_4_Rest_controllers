@@ -37,16 +37,6 @@ public class UserRestController {
         return ResponseEntity.ok(user);
     }
 
-    @GetMapping("/me")
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<User> getCurrentUser() {
-        User user = userService.getCurrentUserFromContext();
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        return ResponseEntity.ok(user);
-    }
-
     @GetMapping("/roles")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Role>> getRoles() {
